@@ -1,0 +1,116 @@
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Main container styling */
+.container {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Heading styling */
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Upload section styling */
+.upload-section {
+    display: none; /* Initially hidden */
+    background: #e9ecef;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: left;
+    position: relative;
+}
+
+.upload-section label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.upload-section input[type="file"] {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+/* Toggle button styling */
+.optional-toggle {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #007BFF;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.optional-toggle:hover {
+    color: #0056b3;
+}
+
+/* Form styling */
+form label {
+    text-align: left;
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin: 10px 0 5px;
+}
+
+input[type="number"],
+input[type="text"],
+button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Button styling */
+button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Status message styling */
+.status {
+    color: #28a745;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Paragraph styling */
+p {
+    font-size: 14px;
+    color: #777;
+}
