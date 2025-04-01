@@ -80,7 +80,10 @@ function generateAndPrintName() {
         printWindow.document.write('</style>');
         printWindow.document.write(`<h2>A ${number}</h2>`);        // First line: Name (centered)
         printWindow.document.write(`<h1>${name}</h1>`);      // Second line: Number (centered)
-                printWindow.document.write(`<div><span>${formattedDate}</span><span>${message}</span></div>`); // Third line: Date (left) and Message (right)
+        printWindow.document.write(`<div><span>${formattedDate}</span><span>${message}</span></div>`); // Third line: Date (left) and Message (right)
+        printWindow.document.write(`<h1> IT Hardware</h1>`);
+        printWindow.document.write(`<h2>Please place returned IT equipment into this tote</h2>`);
+        
         printWindow.document.write('</body></html>');
         printWindow.document.close();
         printWindow.print();
