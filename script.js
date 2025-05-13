@@ -42,7 +42,7 @@ document.getElementById("excelInput").addEventListener("change", (event) => {
 // Listen for the Enter key globally
 document.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
-        event.preventDefault(); // Prevent default form submission
+        //event.preventDefault(); // Prevent default form submission
 
         // Check if a number has been entered
         const number = document.getElementById("numberInput").value;
@@ -77,15 +77,36 @@ function generateAndPrintName() {
         printWindow.document.write('div { display: flex; justify-content: space-between; font-size: 12px; margin: 10px 20px 0 20px; }');
         printWindow.document.write('h1 { font-size: 60px; }');
         printWindow.document.write('h2 { font-size: 40px; }');
+        printWindow.document.write('h3 { font-size: 25px; }');
         printWindow.document.write('</style>');
         printWindow.document.write(`<h2>A ${number}</h2>`);        // First line: Name (centered)
         printWindow.document.write(`<h1>${name}</h1>`);      // Second line: Number (centered)
         printWindow.document.write(`<div><span>${formattedDate}</span><span>${message}</span></div>`); // Third line: Date (left) and Message (right)
-        printWindow.document.write(`<h1>IT Hardware</h1>`);
-        //printWindow.document.write(`<div><h2>Please place returned IT equipment into this tote</h2></div>`);
-        
+        printWindow.document.write(`<div><h1> IT Hardware</h1></div>`);
+        printWindow.document.write(`<div><h1>Return to IT</h1></div>`);
+        printWindow.document.write(`<h3>Kindly place the returned IT equipment into this tote and securely attach the return label to the outside of the tote.</h3>`);       
         printWindow.document.write('</body></html>');
         printWindow.document.close();
         printWindow.print();
     }
+
+    document.getElementById("return").onclick = function() {printReturn()};
+
+function printReturn() {
+        const printWindow = window.open('', '', 'height=400,width=600');
+        printWindow.document.write('<html><head><title>Print</title></head><body>');
+        printWindow.document.write('<style>');
+        printWindow.document.write('h1, h2 { text-align: center; }');
+        printWindow.document.write('div { display: flex; justify-content: space-between; font-size: 12px; margin: 10px 20px 0 20px; }');
+        printWindow.document.write('h1 { font-size: 60px; }');
+        printWindow.document.write('h2 { font-size: 25px; }');
+        printWindow.document.write('</style>');
+        printWindow.document.write(`<div><h1>Return to IT</h1></div>`);
+        printWindow.document.write(`<div><h2>Kindly place the returned IT equipment into this tote and securely attach the return label to the outside of the tote.</h2></div>`);
+        
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+
+}
 }
