@@ -16,7 +16,7 @@ window.onload = () => {
         document.getElementById("statusMessage").textContent = "Previously loaded Excel file has been reloaded!";
     }
 };
-
+document.getElementById("printButton").addEventListener("click", generateAndPrintName);
 // Handle Excel file upload
 document.getElementById("excelInput").addEventListener("change", (event) => {
     const file = event.target.files[0];
@@ -57,56 +57,100 @@ document.addEventListener("keydown", (event) => {
 function generateAndPrintName() {
     const number = document.getElementById("numberInput").value;
     const message = document.getElementById("messageInput").value;
+    const includeExtras = document.getElementById("extraPagesCheckbox").checked;
 
-    // Search for the number in the data
     const entry = data.find(row => row["Number"] == number);
     const name = entry ? entry["Name"] : "Unknown";
-
     document.getElementById("outputName").textContent = `Generated Name: ${name}`;
 
-    // Get today's date
-    const today = new Date();
-    const formattedDate = today.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const today = new Date().toLocaleDateString('en-GB', {
+        day: '2-digit', month: '2-digit', year: 'numeric'
+    });
 
-    // Print the number, name, date, and message
     if (name && name !== "Unknown") {
-        const printWindow = window.open('', '', 'height=400,width=600');
-        printWindow.document.write('<html><head><title>Print</title></head><body>');
-        printWindow.document.write('<style>');
-        printWindow.document.write('h1, h2 { text-align: center; }');
-        printWindow.document.write('div { display: flex; justify-content: space-between; font-size: 12px; margin: 10px 20px 0 20px; }');
-        printWindow.document.write('h1 { font-size: 60px; }');
-        printWindow.document.write('h2 { font-size: 40px; }');
-        printWindow.document.write('h3 { font-size: 25px; }');
-        printWindow.document.write('</style>');
-        printWindow.document.write(`<h2>A ${number}</h2>`);        // First line: Name (centered)
-        printWindow.document.write(`<h1>${name}</h1>`);      // Second line: Number (centered)
-        printWindow.document.write(`<div><span>${formattedDate}</span><span>${message}</span></div>`); // Third line: Date (left) and Message (right)
-        printWindow.document.write(`<div><h1> IT Hardware</h1></div>`);
-        printWindow.document.write(`<div><h1>Return to IT</h1></div>`);
-        printWindow.document.write(`<h3>Kindly place the returned IT equipment into this tote and securely attach the return label to the outside of the tote.</h3>`);       
-        printWindow.document.write('</body></html>');
+        const barcodeUrl = `http://bwipjs-api.metafloor.com/?bcid=code128&text=${number}&scaleX=5&scaleY=0.5`;
+        const printWindow = window.open('', '', 'width=1000,height=800');
+
+        let html = `
+            <html>
+            <head>
+                <title>Print</title>
+                <style>
+                    @page {
+                        size: 10cm 8cm;
+                        margin: 2;
+                    }
+                    body {
+                        margin: 0;
+                        font-family: Arial, sans-serif;
+                    }
+                    .label {
+                        width: 9.5cm;
+                        height: 7.5cm;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        page-break-after: always;
+                        text-align: center;
+                    }
+                    h1 { font-size: 60px; margin: 10px 0; }
+                    h2 { font-size: 40px; margin: 0; }
+                    .info-row {
+                        width: 90%;
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: 10px;
+                        margin-top: 20px;
+                    }
+                    img { margin-top: 0; }
+                </style>
+            </head>
+            <body>
+                <div class="label">
+                    <h2>A ${number}</h2>
+                    <h1>${name}</h1>
+                    <img id="barcode" alt="Barcode for ${number}" src="${barcodeUrl}">
+                    <div class="info-row"><span>${today}</span><span>${message}</span></div>
+                </div>
+
+                <div class="label">
+                    <div style="font-size: 80px; font-weight: bold;">IT Hardware</div>
+                </div>
+        `;
+
+        if (includeExtras) {
+            html += `
+                <div class="label">
+                    <p style="font-size: 26px;">Kindly place the returned IT equipment into this tote and securely attach the return label to the outside of the tote.</p>
+                </div>
+
+                <div class="label">
+                     <div style="font-size: 80px; font-weight: bold;">Return to IT</div>
+                </div>
+            `;
+        }
+
+        html += `
+                <script>
+                    const img = document.getElementById('barcode');
+                    img.onload = function() {
+                        setTimeout(() => {
+                            window.print();
+                        }, 100);
+                    };
+                    window.onafterprint = function() {
+                        window.close();
+                    };
+                </script>
+            </body>
+            </html>
+        `;
+
+        printWindow.document.open();
+        printWindow.document.write(html);
         printWindow.document.close();
-        printWindow.print();
+    } else {
+        document.getElementById("statusMessage").textContent = "Please enter a valid number with a known name.";
     }
-
-    document.getElementById("return").onclick = function() {printReturn()};
-
-function printReturn() {
-        const printWindow = window.open('', '', 'height=400,width=600');
-        printWindow.document.write('<html><head><title>Print</title></head><body>');
-        printWindow.document.write('<style>');
-        printWindow.document.write('h1, h2 { text-align: center; }');
-        printWindow.document.write('div { display: flex; justify-content: space-between; font-size: 12px; margin: 10px 20px 0 20px; }');
-        printWindow.document.write('h1 { font-size: 60px; }');
-        printWindow.document.write('h2 { font-size: 25px; }');
-        printWindow.document.write('</style>');
-        printWindow.document.write(`<div><h1>Return to IT</h1></div>`);
-        printWindow.document.write(`<div><h2>Kindly place the returned IT equipment into this tote and securely attach the return label to the outside of the tote.</h2></div>`);
-        
-        printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        printWindow.print();
-
-}
 }
