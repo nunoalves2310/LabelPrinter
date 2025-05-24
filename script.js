@@ -1,50 +1,38 @@
 let data = [];
-     // Toggle the visibility of the upload section
-     document.getElementById("toggleUpload").addEventListener("click", () => {
-        const uploadSection = document.getElementById("uploadSection");
-        if (uploadSection.style.display === "none" || uploadSection.style.display === "") {
-            uploadSection.style.display = "block"; // Show the section
-        } else {
-            uploadSection.style.display = "none"; // Hide the section
-        }
-    });
-// Load data from localStorage when the page loads
+
+// Load CSV from GitHub on page load
 window.onload = () => {
-    const savedData = localStorage.getItem("excelData");
-    if (savedData) {
-        data = JSON.parse(savedData);
-        document.getElementById("statusMessage").textContent = "Previously loaded Excel file has been reloaded!";
-    }
+    const CSV_URL = "https://raw.githubusercontent.com/nunoalves2310/LabelPrinter/refs/heads/main/StoreNames.csv";
+
+    fetch(CSV_URL)
+        .then(response => response.text())
+        .then(csv => {
+            const lines = csv.trim().split('\n');
+            const headers = lines[0].split(',');
+
+            data = lines.slice(1).map(row => {
+                const values = row.split(',');
+                let obj = {};
+                headers.forEach((header, i) => {
+                    obj[header.trim()] = values[i].trim();
+                });
+                return obj;
+            });
+
+            document.getElementById("statusMessage").textContent = "CSV file loaded from GitHub!";
+        })
+        .catch(err => {
+            document.getElementById("statusMessage").textContent = "Failed to load CSV data.";
+            console.error(err);
+        });
 };
+
+// Print Button
 document.getElementById("printButton").addEventListener("click", generateAndPrintName);
-// Handle Excel file upload
-document.getElementById("excelInput").addEventListener("change", (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const binaryData = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(binaryData, { type: "array" });
-            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-            data = XLSX.utils.sheet_to_json(firstSheet);
 
-            // Save the Excel data to localStorage for future use
-            localStorage.setItem("excelData", JSON.stringify(data));
-
-            document.getElementById("statusMessage").textContent = "Excel file loaded successfully!";
-        };
-        reader.readAsArrayBuffer(file);
-    } else {
-        document.getElementById("statusMessage").textContent = "Failed to load Excel file.";
-    }
-});
-
-// Listen for the Enter key globally
+// Enter Key to Trigger Print
 document.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
-        //event.preventDefault(); // Prevent default form submission
-
-        // Check if a number has been entered
         const number = document.getElementById("numberInput").value;
         if (number) {
             generateAndPrintName();
@@ -126,7 +114,7 @@ function generateAndPrintName() {
                 </div>
 
                 <div class="label">
-                     <div style="font-size: 80px; font-weight: bold;">Return to IT</div>
+                    <div style="font-size: 80px; font-weight: bold;">Return to IT</div>
                 </div>
             `;
         }
@@ -142,7 +130,7 @@ function generateAndPrintName() {
                     window.onafterprint = function() {
                         window.close();
                     };
-                </script>
+                <\/script>
             </body>
             </html>
         `;
@@ -154,3 +142,4 @@ function generateAndPrintName() {
         document.getElementById("statusMessage").textContent = "Please enter a valid number with a known name.";
     }
 }
+
