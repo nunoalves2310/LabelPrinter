@@ -56,7 +56,7 @@ function generateAndPrintName() {
     });
 
     if (name && name !== "Unknown") {
-        const barcodeUrl = `http://bwipjs-api.metafloor.com/?bcid=code128&text=A ${number}&scaleX=5&scaleY=0.5`;
+        const barcodeUrl = `http://bwipjs-api.metafloor.com/?bcid=code128&text=${number}&scaleX=5&scaleY=0.5`;
         const printWindow = window.open('', '', 'width=1000,height=800');
 
         let html = `
