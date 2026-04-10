@@ -82,7 +82,7 @@ function generateAndPrintName() {
                         page-break-after: always;
                         text-align: center;
                     }
-                    h1 { font-size: 58px; margin: 10px 0; }
+                    h1 { font-size: 55px; margin: 10px 0; }
                     h2 { font-size: 40px; margin: 0; }
                     .info-row {
                         width: 90%;
